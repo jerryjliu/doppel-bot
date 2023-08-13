@@ -7,11 +7,16 @@ from .common import (
     MODEL_PATH,
     VOL_MOUNT_PATH,
     WANDB_PROJECT,
-    generate_prompt,
+    # generate_prompt,
     output_vol,
     stub,
+    # user_data_path,
+    # user_model_path,
+)
+from .common_sql import (
     user_data_path,
     user_model_path,
+    generate_prompt_sql,
 )
 
 
@@ -120,9 +125,10 @@ def _train(
         return result
 
     def generate_and_tokenize_prompt(data_point):
-        full_prompt = generate_prompt(
+        full_prompt = generate_prompt_sql(
             data_point["user"],
             data_point["input"],
+            data_point["context"],
             data_point["output"],
         )
         tokenized_full_prompt = tokenize(full_prompt)
@@ -245,7 +251,7 @@ def _train(
 def finetune(user: str, team_id: str = ""):
     from datasets import load_dataset
 
-    data_path = user_data_path(user, team_id).as_posix()
+    data_path = user_data_path(user).as_posix()
     data = load_dataset("json", data_files=data_path)
 
     num_samples = len(data["train"])
@@ -256,7 +262,7 @@ def finetune(user: str, team_id: str = ""):
         MODEL_PATH,
         data,
         val_set_size=val_set_size,
-        output_dir=user_model_path(user, team_id).as_posix(),
+        output_dir=user_model_path(user).as_posix(),
         wandb_project=WANDB_PROJECT,
         wandb_run_name=f"openllama-{team_id}-{user}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}",
     )
