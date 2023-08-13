@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta, timezone
 import os
-from typing import Iterable
+from typing import Iterable, Any
 
 from modal import Dict, Image, Secret, Retries
 
@@ -10,11 +10,12 @@ from .common import (
     VOL_MOUNT_PATH,
     output_vol,
     user_data_path,
+    SLACK_SECRET_NAME
 )
 
 scraper_kwargs = dict(
     image=Image.debian_slim().pip_install("slack-sdk"),
-    secrets=[Secret.from_name("slack-finetune-secret")],
+    secrets=[Secret.from_name(SLACK_SECRET_NAME)],
 )
 
 # Cache for slack threads.
@@ -101,6 +102,11 @@ def get_question_response_pairs(
         for message in result["messages"]:
             if "reply_count" in message and message["reply_count"] > 0:
                 threads.append(message["ts"])
+
+        #     # TODO: TMP
+        #     break
+        # break
+
 
         if not result["has_more"]:
             break

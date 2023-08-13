@@ -12,6 +12,7 @@ from .common import (
     output_vol,
     get_user_for_team_id,
     stub,
+    SLACK_SECRET_NAME
 )
 from .inference import OpenLlamaModel
 from .scrape import scrape
@@ -83,7 +84,7 @@ def get_oauth_settings():
 @stub.function(
     image=stub.slack_image,
     secrets=[
-        Secret.from_name("slack-finetune-secret"),
+        Secret.from_name(SLACK_SECRET_NAME),
         # TODO: Modal should support optional secrets.
         *([Secret.from_name("neon-secret")] if MULTI_WORKSPACE_SLACK_APP else []),
     ],

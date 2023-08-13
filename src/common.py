@@ -11,6 +11,8 @@ WANDB_PROJECT = ""
 
 MODEL_PATH = "/model"
 
+SLACK_SECRET_NAME = "my-slack-secret"
+
 
 def download_models():
     from transformers import LlamaForCausalLM, LlamaTokenizer
