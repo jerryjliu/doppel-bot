@@ -14,7 +14,7 @@ import os
     network_file_systems={VOL_MOUNT_PATH.as_posix(): output_vol},
     cloud="gcp"
 )
-def main():
+def main(cmd: str):
     import json
 
     # read data json
@@ -30,4 +30,7 @@ def main():
     # print(len(data))
     # raise Exception
 
-    print(os.listdir(VOL_MOUNT_PATH / "data_sql" / "Jerry Liu"))
+    # print(os.listdir(VOL_MOUNT_PATH / "data_sql" / "Jerry Liu"))
+
+    import subprocess
+    print(subprocess.run(cmd, shell=True))

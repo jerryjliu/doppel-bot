@@ -1,4 +1,4 @@
-from modal import Image, Stub, NetworkFileSystem
+from modal import Image, Stub, NetworkFileSystem, Dict
 import random
 from typing import Optional
 from pathlib import Path
@@ -47,12 +47,16 @@ openllama_image = (
         "torch==2.0.0",
         "torchvision==0.15.1",
         "sentencepiece==0.1.97",
+        "llama-index==0.8.1",
+        "sentence-transformers",
     )
     .run_function(download_models)
     .pip_install("wandb==0.15.0")
 )
 
 stub = Stub(name="doppel-bot", image=openllama_image)
+stub.model_dict = Dict.new()
+stub.data_dict = Dict.new()
 
 stub.slack_image = (
     Image.debian_slim()
